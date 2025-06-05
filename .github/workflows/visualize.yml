@@ -1,0 +1,39 @@
+on:
+  push:
+    branches:
+    - main
+jobs:
+      test:
+        name: Test on node ${{ matrix.node_version }} and ${{ matrix.os }}
+        runs-on: ${{ matrix.os }}
+        strategy:
+          matrix:
+            node_version: ['18.x', '20.x']
+            os: [ubuntu-latest, windows-latest, macOS-latest]
+    
+        steps:
+        - name: Checkout code
+          uses: actions/checkout@v4
+        - name: Update diagram
+          uses: githubocto/repo-visualizer@0.7.1
+          with:
+            output_file: "images/diagram.svg"
+            excluded_paths: "dist,node_modules"
+        - name: Update diagram
+          id: make_diagram
+          uses: githubocto/repo-visualizer@0.7.1
+          with:
+            output_file: "output-diagram.svg"
+            artifact_name: "my-diagram"
+        - name: Get artifact
+          uses: actions/download-artifact@v2
+          with:
+            name: "my-diagram"
+            path: "downloads"
+            should_push: false!
+        - name: npm install, build and test
+          run: |
+            npm install
+            npm run build --if-present
+            npm test
+          
