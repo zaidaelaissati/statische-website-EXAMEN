@@ -22,12 +22,15 @@ jobs:
           with:
             output_file: "output-diagram.svg"
             artifact_name: "diagram"
-        - name: Get artifact
-          uses: actions/download-artifact@v2
+     
+        - uses: actions/download-artifact@v4
           with:
-            name: "diagram"
-            path:  "downloads"
-            should_push: false!
+            name: my-artifact
+            path: your/destination/dir
+        - name: Display structure of downloaded files
+          run: ls -R your/destination/dir
+          
+              #should_push: false!
         - name: npm install, build and test
           run: |
             npm install
