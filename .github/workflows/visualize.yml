@@ -1,3 +1,4 @@
+
 on:
   push:
     branches:
@@ -10,7 +11,11 @@ jobs:
         steps:
         - name: Checkout code
           uses: actions/checkout@v4
-
+        - name: Update diagram
+          uses: githubocto/repo-visualizer@0.7.1
+          with:
+            output_file: "images/diagram.svg"
+            excluded_paths: "dist,node_modules"
         - name: Update diagram
           id: make_diagram
           uses: githubocto/repo-visualizer@0.7.1
@@ -21,11 +26,12 @@ jobs:
           uses: actions/download-artifact@v2
           with:
             name: "diagram"
-            path: "downloads"
+            path:   ${{ steps.make_diagram.outputs.svg }}.
             should_push: false!
         - name: npm install, build and test
           run: |
             npm install
             npm run build --if-present
             npm test
+   
           
