@@ -9,13 +9,7 @@ jobs:
         runs-on: ubuntu-latest
         
         steps:
-        - name: Checkout code
-          uses: actions/checkout@v4
-        - name: Update diagram
-          uses: githubocto/repo-visualizer@0.7.1
-          with:
-            output_file: "images/diagram.svg"
-            excluded_paths: "dist,node_modules"
+
         - name: Update diagram
           id: make_diagram
           uses: githubocto/repo-visualizer@0.7.1
